@@ -2,10 +2,12 @@ package com.example.yourday.model;
 
 import android.widget.SeekBar;
 
+import com.orm.SugarRecord;
+
 import java.util.Date;
 
-public class Day {
-    String date;
+public class Day extends SugarRecord {
+    int date;
     String ort;
     int wieWarTag;
     String erlebnis;
@@ -13,18 +15,18 @@ public class Day {
     public Day(){
     }
 
-    public Day(String date, String ort, int wieWarTag, String erlebnis){
+    public Day(int date, String ort, int wieWarTag, String erlebnis){
         this.date = date;
         this.erlebnis = erlebnis;
         this.ort = ort;
         this.wieWarTag = wieWarTag;
     }
 
-    public String getDate() {
+    public int getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(int date) {
         this.date = date;
     }
 
