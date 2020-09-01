@@ -27,7 +27,7 @@ public class Aufgaben extends AppCompatActivity {
         setContentView(R.layout.activity_aufgaben);
 
         listView = findViewById(R.id.listView);
-        button = findViewById(R.id.button);
+        button = findViewById(R.id.buttonHinzufuegen);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
