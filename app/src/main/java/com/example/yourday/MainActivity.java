@@ -3,7 +3,6 @@ package com.example.yourday;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.app.DirectAction;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,19 +21,16 @@ import com.orm.SugarContext;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     Button buttonUebersicht;
     Button buttonAuftraege;
-    Button buttonSpeichern;
     ImageButton buttonKalender;
     DatePickerDialog picker;
     TextView textViewDatum;
 
-    List<Day> days;
+    ArrayList<Day> days = new ArrayList<Day>();
 
-    int id;
     TextView date;
     TextView ort;
     SeekBar wieWarTag;
@@ -47,41 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
         SugarContext.init(this);
 
-        buttonSpeichern = (Button) findViewById(R.id.buttonSpeichern);
         buttonAuftraege = (Button) findViewById(R.id.buttonAuftraege);
         buttonUebersicht = (Button) findViewById(R.id.buttonUebersicht);
         buttonKalender = (ImageButton) findViewById(R.id.imageButtonKalender);
         textViewDatum = (TextView) findViewById(R.id.textViewDatum);
 
-        date = (TextView) findViewById(R.id.textViewDatum);
-        ort = (EditText) findViewById(R.id.editTextOrt);
-        wieWarTag = (SeekBar) findViewById(R.id.seekBarWieWarTag);
-        erlebnis = (EditText) findViewById(R.id.editTextTextMultiLineErlebnis);
-
-        final Calendar cldrStart = Calendar.getInstance();
-        int day = cldrStart.get(Calendar.DAY_OF_MONTH);
-        int month = cldrStart.get(Calendar.MONTH);
-        int year = cldrStart.get(Calendar.YEAR);
-        textViewDatum.setText(day + "/" + (month + 1) + "/" + year);
-
-        days = Day.listAll(Day.class);
-        for(int i = 0;i<days.size();i++){
-            String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-            int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
-            if(days.get(i).getDate() == dateJustNumbersInteger){
-                ort.setText(days.get(i).getOrt());
-                erlebnis.setText(days.get(i).getErlebnis());
-                wieWarTag.setProgress(days.get(i).getWieWarTag());
-            }
-        }
-
         buttonKalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ort.setText("");
-                erlebnis.setText("");
-                wieWarTag.setProgress(0);
                 System.out.println("Kalender Klick");
                 final Calendar cldr = Calendar.getInstance();
                 int day = cldr.get(Calendar.DAY_OF_MONTH);
@@ -96,16 +65,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }, year, month, day);
                 picker.show();
-                for(int i = 0;i<days.size();i++){
-                    String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-                    int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
-                    if(days.get(i).getDate() == dateJustNumbersInteger){
-                        ort.setText(days.get(i).getOrt());
-                        erlebnis.setText(days.get(i).getErlebnis());
-                        wieWarTag.setProgress(days.get(i).getWieWarTag());
-                    }
-                }
             }
 
         });
@@ -119,57 +78,65 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        buttonSpeichern.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        date = (TextView) findViewById(R.id.textViewDatum);
+        ort = (EditText) findViewById(R.id.editTextOrt);
+        wieWarTag = (SeekBar) findViewById(R.id.seekBarWieWarTag);
+        erlebnis = (EditText) findViewById(R.id.editTextTextMultiLineErlebnis);
+
+        ort.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
                 Boolean alreadyExists = false;
                 int indexOfCurrentDay = 0;
                 for(int i = 0;i<days.size();i++){
-                    String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-                    int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
-                    if(days.get(i).getDate() == dateJustNumbersInteger){
+                    if(days.get(i).getDate() == date.getText().toString()){
                         alreadyExists = true;
                         indexOfCurrentDay = i;
                     }
                 }
                 if(alreadyExists == false){
-                    String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-                    int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
-                    Day day = new Day(dateJustNumbersInteger,ort.getText().toString(),wieWarTag.getProgress(),
+                    Day day = new Day(date.getText().toString(),ort.getText().toString(),wieWarTag.getProgress(),
                             erlebnis.getText().toString());
-                    day.save();
+                    days.add(day);
                 } else {
                     days.get(indexOfCurrentDay).setOrt(ort.getText().toString());
-                    days.get(indexOfCurrentDay).setErlebnis(erlebnis.getText().toString());
-                    days.get(indexOfCurrentDay).setWieWarTag(wieWarTag.getProgress());
-                    days.get(indexOfCurrentDay).save();
                 }
             }
 
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        date.addTextChangedListener(new TextWatcher() {
+        wieWarTag.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+                Boolean alreadyExists = false;
+                int indexOfCurrentDay = 0;
                 for(int i = 0;i<days.size();i++){
-                    String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-                    int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
-                    if(days.get(i).getDate() == dateJustNumbersInteger){
-                        ort.setText(days.get(i).getOrt());
-                        erlebnis.setText(days.get(i).getErlebnis());
-                        wieWarTag.setProgress(days.get(i).getWieWarTag());
+                    if(days.get(i).getDate() == date.getText().toString()){
+                        alreadyExists = true;
+                        indexOfCurrentDay = i;
                     }
                 }
+                if(alreadyExists == false){
+                    Day day = new Day(date.getText().toString(),ort.getText().toString(),wieWarTag.getProgress(),
+                            erlebnis.getText().toString());
+                    days.add(day);
+                } else {
+                    days.get(indexOfCurrentDay).setWieWarTag(wieWarTag.getProgress());
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                // TODO Auto-generated method stub
             }
         });
     }
