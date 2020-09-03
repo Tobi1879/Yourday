@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.yourday">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Hilfe"></activity>
+        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".MainActivity2" />
+        <activity android:name=".Hilfe" />
         <activity android:name=".Aufgaben" />
         <activity android:name=".MainActivity">
             <intent-filter>

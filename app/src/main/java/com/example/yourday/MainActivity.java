@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.DirectAction;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -13,8 +16,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yourday.model.Day;
 import com.orm.SugarContext;
@@ -31,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     ImageButton buttonKalender;
     DatePickerDialog picker;
     TextView textViewDatum;
+    ImageButton btnCapture;
+    private static final int Image_Capture_Code = 1;
+    String imageFile;
+
 
     List<Day> days;
 
@@ -39,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     TextView ort;
     SeekBar wieWarTag;
     TextView erlebnis;
+    ImageView imgCapture;
+    Image image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         ort = (EditText) findViewById(R.id.editTextOrt);
         wieWarTag = (SeekBar) findViewById(R.id.seekBarWieWarTag);
         erlebnis = (EditText) findViewById(R.id.editTextTextMultiLineErlebnis);
+        image = (Image) findViewById(R.id.imageView).getI
 
         final Calendar cldrStart = Calendar.getInstance();
         int day = cldrStart.get(Calendar.DAY_OF_MONTH);
@@ -138,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
 
                     Day day = new Day(dateJustNumbersInteger,ort.getText().toString(),wieWarTag.getProgress(),
-                            erlebnis.getText().toString());
+                            erlebnis.getText().toString(),);
                     day.save();
                 } else {
                     days.get(indexOfCurrentDay).setOrt(ort.getText().toString());
@@ -172,5 +184,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Kamera
+        btnCapture =(ImageButton)findViewById(R.id.buttonImage);
+        imgCapture = (ImageView) findViewById(R.id.imageView);
+        btnCapture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(this, CameraActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Image_Capture_Code) {
+            if (resultCode == RESULT_OK) {
+                Bitmap bp = (Bitmap) data.getExtras().get("data");
+                imgCapture.setImageBitmap(bp);
+                //MediaStore.Images.Media.insertImage(getContentResolver(), bp, "Aus App" , "Im Emu geschossen");
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

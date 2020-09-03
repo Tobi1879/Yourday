@@ -1,5 +1,6 @@
 package com.example.yourday.model;
 
+import android.media.Image;
 import android.widget.SeekBar;
 
 import com.orm.SugarRecord;
@@ -11,15 +12,17 @@ public class Day extends SugarRecord {
     String ort;
     int wieWarTag;
     String erlebnis;
+    Image bild;
 
     public Day(){
     }
 
-    public Day(int date, String ort, int wieWarTag, String erlebnis){
+    public Day(int date, String ort, int wieWarTag, String erlebnis, Image bild){
         this.date = date;
         this.erlebnis = erlebnis;
         this.ort = ort;
         this.wieWarTag = wieWarTag;
+        this.bild = bild;
     }
 
     public int getDate() {
@@ -52,5 +55,13 @@ public class Day extends SugarRecord {
 
     public void setErlebnis(String erlebnis) {
         this.erlebnis = erlebnis;
+    }
+
+    public Image getBild() {
+        return bild;
+    }
+
+    public void setBild(Image bild) {
+        this.bild = bild;
     }
 }
