@@ -32,7 +32,7 @@
                 android:textSize="42sp" />
 
             <ImageButton
-                android:id="@+id/imageButtonHilfe2"
+                android:id="@+id/imageButtonHilfe"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="#FFFFFF"
@@ -74,7 +74,6 @@
             android:layout_marginTop="24dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name"
             app:layout_constraintEnd_toStartOf="@+id/button"
             app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +83,8 @@
             android:id="@+id/buttonHinzufuegen"
             android:layout_width="109dp"
             android:layout_height="49dp"
+            android:layout_marginTop="24dp"
+            android:paddingTop="10dp"
             android:text="Hinzufügen"
             tools:layout_editor_absoluteX="286dp"
             tools:layout_editor_absoluteY="115dp" />
@@ -91,7 +92,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="393dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/aufgabenHinzu"
@@ -101,6 +102,25 @@
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonAuftraege"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Aufträge" />
+
+            <Button
+                android:id="@+id/buttonErstellen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Erstellen" />
         </LinearLayout>
     </LinearLayout>
 

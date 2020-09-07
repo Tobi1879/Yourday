@@ -9,12 +9,12 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="728dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp">
 
@@ -33,7 +33,7 @@
                 android:textSize="42sp" />
 
             <ImageButton
-                android:id="@+id/imageButtonHilfe2"
+                android:id="@+id/imageButtonHilfe"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="#FFFFFF"
@@ -164,7 +164,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="171dp"
                 app:srcCompat="?android:attr/activatedBackgroundIndicator" />
 
         </LinearLayout>
@@ -219,13 +219,13 @@
                 android:text="Aufträge" />
 
             <Button
-                android:id="@+id/buttonUebersicht"
+                android:id="@+id/buttonErstellen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Übersicht" />
+                android:text="Erstellen" />
         </LinearLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

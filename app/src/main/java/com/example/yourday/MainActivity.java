@@ -3,13 +3,10 @@ package com.example.yourday;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.app.DirectAction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,9 +24,7 @@ import com.example.yourday.model.Day;
 import com.orm.SugarContext;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Button buttonAuftraege;
     Button buttonSpeichern;
     ImageButton buttonKalender;
+    ImageButton buttonHilfe;
     DatePickerDialog picker;
     TextView textViewDatum;
     ImageButton btnCapture;
@@ -62,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         buttonSpeichern = (Button) findViewById(R.id.buttonSpeichern);
         buttonAuftraege = (Button) findViewById(R.id.buttonAuftraege);
-        buttonUebersicht = (Button) findViewById(R.id.buttonUebersicht);
+        buttonUebersicht = (Button) findViewById(R.id.buttonErstellen);
         buttonKalender = (ImageButton) findViewById(R.id.imageButtonKalender);
+        buttonHilfe = (ImageButton) findViewById(R.id.imageButtonHilfe) ;
         textViewDatum = (TextView) findViewById(R.id.textViewDatum);
 
         date = (TextView) findViewById(R.id.textViewDatum);
@@ -146,6 +143,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("Aufträge Klick");
                 doOpenAufgaben();
+            }
+
+        });
+
+        buttonHilfe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Hilfe Klick");
+                doOpenHilfe();
             }
 
         });
@@ -235,6 +241,10 @@ public class MainActivity extends AppCompatActivity {
     }
     private void doOpenAufgaben() {
         Intent intent = new Intent(this, Aufgaben.class);
+        startActivity(intent);
+    }
+    private void doOpenHilfe() {
+        Intent intent = new Intent(this, Hilfe.class);
         startActivity(intent);
     }
 }

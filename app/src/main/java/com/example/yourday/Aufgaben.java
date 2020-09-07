@@ -1,13 +1,17 @@
 package com.example.yourday;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.http.SslCertificate;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +28,10 @@ public class Aufgaben extends AppCompatActivity {
 
     List<Auftrag> auftraege;
 
+    Button buttonAuftraege;
+    ImageButton buttonHilfe;
+    Button buttonErstellen;
+
     private ArrayList<String> items;
     private ArrayAdapter<String> itemsAdapter;
     private ListView listView;
@@ -39,6 +47,8 @@ public class Aufgaben extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
         button = findViewById(R.id.buttonHinzufuegen);
+        buttonHilfe = (ImageButton) findViewById(R.id.imageButtonHilfe);
+        buttonErstellen = (Button) findViewById(R.id.buttonErstellen);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,16 +69,57 @@ public class Aufgaben extends AppCompatActivity {
                 itemsAdapter.add(auftraege.get(i).getText());
             }
         }
+
+        buttonAuftraege = (Button) findViewById(R.id.buttonAuftraege);
+
+        buttonAuftraege.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Aufträge Klick");
+                doOpenAufgaben();
+            }
+
+        });
+
+        buttonErstellen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Erstellen Klick");
+                doOpenErstellen();
+            }
+
+        });
+
+        buttonHilfe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Hilfe Klick");
+                doOpenHilfe();
+            }
+
+        });
     }
 
     private void setUpListViewListener() {
+        System.out.println("Entfernen 1");
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("Entfernen 2");
                 Context context = getApplicationContext();
+                System.out.println("Entfernen 3");
                 Toast.makeText(context, "Aufgabe entfernt", Toast.LENGTH_LONG).show();
+                System.out.println("Entfernen 4");
 
-                items.remove(i);
+                System.out.println(items.size());
+                for (String item:
+                     items) {
+                    System.out.println(item);
+                }
+
+                auftraege.get(i).delete();
+                itemsAdapter.remove(itemsAdapter.getItem(i).toString());
                 itemsAdapter.notifyDataSetChanged();
                 return true;
             }
@@ -89,5 +140,18 @@ public class Aufgaben extends AppCompatActivity {
         else {
             Toast.makeText(getApplicationContext(), "Schreibe eine Aufgabe.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void doOpenAufgaben() {
+        Intent intent = new Intent(this, Aufgaben.class);
+        startActivity(intent);
+    }
+    private void doOpenHilfe() {
+        Intent intent = new Intent(this, Hilfe.class);
+        startActivity(intent);
+    }
+    private void doOpenErstellen() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
