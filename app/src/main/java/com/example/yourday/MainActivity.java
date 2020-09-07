@@ -6,11 +6,13 @@ import android.app.DatePickerDialog;
 import android.app.DirectAction;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.example.yourday.model.Day;
 import com.orm.SugarContext;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewDatum;
     ImageButton btnCapture;
     private static final int Image_Capture_Code = 1;
-    String imageFile;
 
 
     List<Day> days;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     SeekBar wieWarTag;
     TextView erlebnis;
     ImageView imgCapture;
-    Image image;
+    String imageFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,23 @@ public class MainActivity extends AppCompatActivity {
         ort = (EditText) findViewById(R.id.editTextOrt);
         wieWarTag = (SeekBar) findViewById(R.id.seekBarWieWarTag);
         erlebnis = (EditText) findViewById(R.id.editTextTextMultiLineErlebnis);
-        image = (Image) findViewById(R.id.imageView).getI
+        //image = (Image) findViewById(R.id.imageView).
+        Intent intent = getIntent();
+        if( intent != null )  {
+            intent.getAction();
+            imageFile = ImageHandler.getImageFile();
+            Log.d("IMAGE FILE ADD", "HAS INTENT");
+            if(imageFile != null) {
+                Log.d("IMAGE FILE ADD", imageFile);
+                File imgFile = new  File(imageFile);
+
+                if(imgFile.exists()){
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    ImageView myImage = (ImageView) findViewById(R.id.imageView);
+                    myImage.setImageBitmap(myBitmap);
+                }
+            }
+        }
 
         final Calendar cldrStart = Calendar.getInstance();
         int day = cldrStart.get(Calendar.DAY_OF_MONTH);
@@ -116,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                         ort.setText(days.get(i).getOrt());
                         erlebnis.setText(days.get(i).getErlebnis());
                         wieWarTag.setProgress(days.get(i).getWieWarTag());
+                        //File file = new File(imageFile)
                     }
                 }
             }
@@ -126,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("Aufträge Klick");
-                setContentView(R.layout.activity_aufgaben);
+                doOpenAufgaben();
             }
 
         });
@@ -150,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
 
                     Day day = new Day(dateJustNumbersInteger,ort.getText().toString(),wieWarTag.getProgress(),
-                            erlebnis.getText().toString(),);
+                            erlebnis.getText().toString(),imageFile);
                     day.save();
                 } else {
                     days.get(indexOfCurrentDay).setOrt(ort.getText().toString());
@@ -191,8 +210,7 @@ public class MainActivity extends AppCompatActivity {
         btnCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(this, CameraActivity.class);
-                startActivity(intent);
+                doTakePicClick();
             }
         });
 
@@ -210,5 +228,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             }
         }
+    }
+    private void doTakePicClick() {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+    }
+    private void doOpenAufgaben() {
+        Intent intent = new Intent(this, Aufgaben.class);
+        startActivity(intent);
     }
 }

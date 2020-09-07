@@ -12,12 +12,12 @@ public class Day extends SugarRecord {
     String ort;
     int wieWarTag;
     String erlebnis;
-    Image bild;
+    String bild;
 
     public Day(){
     }
 
-    public Day(int date, String ort, int wieWarTag, String erlebnis, Image bild){
+    public Day(int date, String ort, int wieWarTag, String erlebnis, String bild){
         this.date = date;
         this.erlebnis = erlebnis;
         this.ort = ort;
@@ -57,11 +57,11 @@ public class Day extends SugarRecord {
         this.erlebnis = erlebnis;
     }
 
-    public Image getBild() {
+    public String getBild() {
         return bild;
     }
 
-    public void setBild(Image bild) {
+    public void setBild(String bild) {
         this.bild = bild;
     }
 }
