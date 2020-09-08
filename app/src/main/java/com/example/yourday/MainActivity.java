@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 ort.setText(days.get(i).getOrt());
                 erlebnis.setText(days.get(i).getErlebnis());
                 wieWarTag.setProgress(days.get(i).getWieWarTag());
-                /*imageFile = ImageHandler.getImageFile();
+                /*imageFile = days.get(i).getBild();
                 if(days.get(i).getBild() != null) {
-                    File imgFile = new  File(days.get(i).getBild());
+                    File imgFile = new File(days.get(i).getBild());
 
                     if(imgFile.exists()){
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -245,6 +245,12 @@ public class MainActivity extends AppCompatActivity {
         btnCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for(int i = 0;i<days.size();i++) {
+                    if (days.get(i).getDate().equals(date.getText().toString())) {
+                        ImageHandler.setDay(days.get(i));
+                        System.out.print(days.get(i).toString());
+                    }
+                }
                 doTakePicClick();
             }
         });
