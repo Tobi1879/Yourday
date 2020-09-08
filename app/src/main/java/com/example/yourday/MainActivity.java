@@ -245,12 +245,29 @@ public class MainActivity extends AppCompatActivity {
         btnCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean alreadyExist = false;
                 for(int i = 0;i<days.size();i++) {
                     if (days.get(i).getDate().equals(date.getText().toString())) {
                         ImageHandler.setDay(days.get(i));
                         System.out.print(days.get(i).toString());
+                        alreadyExist = true;
                     }
                 }
+
+                if (alreadyExist == false){
+                    Day day = new Day(date.getText().toString(),ort.getText().toString(),wieWarTag.getProgress(),
+                            erlebnis.getText().toString(),imageFile);
+                    days.add(day);
+                    day.save();                }
+
+                for(int i = 0;i<days.size();i++) {
+                    if (days.get(i).getDate().equals(date.getText().toString())) {
+                        ImageHandler.setDay(days.get(i));
+                        System.out.print(days.get(i).toString());
+
+                    }
+                }
+
                 doTakePicClick();
             }
         });
