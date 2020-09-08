@@ -8,7 +8,7 @@ import com.orm.SugarRecord;
 import java.util.Date;
 
 public class Day extends SugarRecord {
-    int date;
+    String date;
     String ort;
     int wieWarTag;
     String erlebnis;
@@ -17,7 +17,7 @@ public class Day extends SugarRecord {
     public Day(){
     }
 
-    public Day(int date, String ort, int wieWarTag, String erlebnis, String bild){
+    public Day(String  date, String ort, int wieWarTag, String erlebnis, String bild){
         this.date = date;
         this.erlebnis = erlebnis;
         this.ort = ort;
@@ -25,11 +25,11 @@ public class Day extends SugarRecord {
         this.bild = bild;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

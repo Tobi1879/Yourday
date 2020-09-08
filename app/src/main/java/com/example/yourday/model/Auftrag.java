@@ -10,6 +10,9 @@ import java.util.Date;
 public class Auftrag extends SugarRecord {
     String text;
 
+    public String toString() {
+        return text;
+    }
     public Auftrag() {
     }
     public Auftrag(String text){

@@ -33,7 +33,7 @@ public class Aufgaben extends AppCompatActivity {
     Button buttonErstellen;
 
     private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
+    private ArrayAdapter<Auftrag> itemsAdapter;
     private ListView listView;
     private Button button;
     private int instances;
@@ -57,18 +57,11 @@ public class Aufgaben extends AppCompatActivity {
             }
         });
 
-        items = new ArrayList<>();
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        listView.setAdapter(itemsAdapter);
-        setUpListViewListener();
-
         auftraege = Auftrag.listAll(Auftrag.class);
 
-        for(int i = 0;i<auftraege.size();i++){
-            if(auftraege.get(i).getText() != ""){
-                itemsAdapter.add(auftraege.get(i).getText());
-            }
-        }
+        itemsAdapter = new ArrayAdapter<Auftrag>(this, android.R.layout.simple_list_item_1, auftraege);
+        listView.setAdapter(itemsAdapter);
+        setUpListViewListener();
 
         buttonAuftraege = (Button) findViewById(R.id.buttonAuftraege);
 
@@ -112,14 +105,8 @@ public class Aufgaben extends AppCompatActivity {
                 Toast.makeText(context, "Aufgabe entfernt", Toast.LENGTH_LONG).show();
                 System.out.println("Entfernen 4");
 
-                System.out.println(items.size());
-                for (String item:
-                     items) {
-                    System.out.println(item);
-                }
-
-                auftraege.get(i).delete();
-                itemsAdapter.remove(itemsAdapter.getItem(i).toString());
+                itemsAdapter.getItem(i).delete();
+                itemsAdapter.remove(itemsAdapter.getItem(i));
                 itemsAdapter.notifyDataSetChanged();
                 return true;
             }
@@ -133,8 +120,8 @@ public class Aufgaben extends AppCompatActivity {
         if (!(itemText.equals(""))){
             Auftrag auftrag = new Auftrag(itemText);
             auftrag.save();
-            auftraege.add(auftrag);
-            itemsAdapter.add(auftrag.getText());
+            //auftraege.add(auftrag);
+            itemsAdapter.add(auftrag);
             input.setText("");
         }
         else {

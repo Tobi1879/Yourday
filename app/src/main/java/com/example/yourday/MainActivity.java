@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -90,16 +91,28 @@ public class MainActivity extends AppCompatActivity {
         int month = cldrStart.get(Calendar.MONTH);
         int year = cldrStart.get(Calendar.YEAR);
         textViewDatum.setText(day + "/" + (month + 1) + "/" + year);
+        if(ImageHandler.getDay() != null) {
+            date.setText(ImageHandler.getDay().getDate());
+        }
 
         days = Day.listAll(Day.class);
         for(int i = 0;i<days.size();i++){
             String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
             int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
 
-            if(days.get(i).getDate() == dateJustNumbersInteger){
+            if(days.get(i).getDate().equals(date.getText().toString())){
                 ort.setText(days.get(i).getOrt());
                 erlebnis.setText(days.get(i).getErlebnis());
                 wieWarTag.setProgress(days.get(i).getWieWarTag());
+                /*imageFile = ImageHandler.getImageFile();
+                if(days.get(i).getBild() != null) {
+                    File imgFile = new  File(days.get(i).getBild());
+
+                    if(imgFile.exists()){
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        imgCapture.setImageBitmap(myBitmap);
+                    }
+                }*/
             }
         }
 
@@ -127,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                     String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
                     int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
 
-                    if(days.get(i).getDate() == dateJustNumbersInteger){
+                    if(days.get(i).getDate().equals(date.getText().toString())){
                         ort.setText(days.get(i).getOrt());
                         erlebnis.setText(days.get(i).getErlebnis());
                         wieWarTag.setProgress(days.get(i).getWieWarTag());
@@ -165,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                     String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
                     int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
 
-                    if(days.get(i).getDate() == dateJustNumbersInteger){
+                    if(days.get(i).getDate().equals(date.getText().toString())){
                         alreadyExists = true;
                         indexOfCurrentDay = i;
                     }
@@ -174,13 +187,15 @@ public class MainActivity extends AppCompatActivity {
                     String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
                     int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
 
-                    Day day = new Day(dateJustNumbersInteger,ort.getText().toString(),wieWarTag.getProgress(),
+                    Day day = new Day(date.getText().toString(),ort.getText().toString(),wieWarTag.getProgress(),
                             erlebnis.getText().toString(),imageFile);
+                    days.add(day);
                     day.save();
                 } else {
                     days.get(indexOfCurrentDay).setOrt(ort.getText().toString());
                     days.get(indexOfCurrentDay).setErlebnis(erlebnis.getText().toString());
                     days.get(indexOfCurrentDay).setWieWarTag(wieWarTag.getProgress());
+                    days.get(indexOfCurrentDay).setBild(imageFile);
                     days.get(indexOfCurrentDay).save();
                 }
             }
@@ -197,14 +212,28 @@ public class MainActivity extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
+                // zuerst Formular leeren
+                ort.setText("");
+                erlebnis.setText("");
+                wieWarTag.setProgress(0);
+                imgCapture.setImageBitmap(null);
                 for(int i = 0;i<days.size();i++){
                     String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
                     int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
 
-                    if(days.get(i).getDate() == dateJustNumbersInteger){
+                    if(days.get(i).getDate().equals(date.getText().toString())){
                         ort.setText(days.get(i).getOrt());
                         erlebnis.setText(days.get(i).getErlebnis());
                         wieWarTag.setProgress(days.get(i).getWieWarTag());
+                        imageFile = ImageHandler.getImageFile();
+                        if(days.get(i).getBild() != null) {
+                            File imgFile = new  File(days.get(i).getBild());
+
+                            if(imgFile.exists()){
+                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                imgCapture.setImageBitmap(myBitmap);
+                            }
+                        }
                     }
                 }
             }
