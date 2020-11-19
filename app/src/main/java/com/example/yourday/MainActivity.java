@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         ort = (EditText) findViewById(R.id.editTextOrt);
         wieWarTag = (SeekBar) findViewById(R.id.seekBarWieWarTag);
         erlebnis = (EditText) findViewById(R.id.editTextTextMultiLineErlebnis);
-        //image = (Image) findViewById(R.id.imageView).
         Intent intent = getIntent();
         if( intent != null )  {
             intent.getAction();
@@ -95,27 +94,19 @@ public class MainActivity extends AppCompatActivity {
             date.setText(ImageHandler.getDay().getDate());
         }
 
+        // alle Day Instanzen holen
         days = Day.listAll(Day.class);
+        // durch alle Days durchloopen
         for(int i = 0;i<days.size();i++){
-            String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-            int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
+            // Wenn der heutige Tag vorhanden ist, Werte in Formular eintragen
             if(days.get(i).getDate().equals(date.getText().toString())){
                 ort.setText(days.get(i).getOrt());
                 erlebnis.setText(days.get(i).getErlebnis());
                 wieWarTag.setProgress(days.get(i).getWieWarTag());
-                /*imageFile = days.get(i).getBild();
-                if(days.get(i).getBild() != null) {
-                    File imgFile = new File(days.get(i).getBild());
-
-                    if(imgFile.exists()){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        imgCapture.setImageBitmap(myBitmap);
-                    }
-                }*/
+                }
             }
-        }
 
+        // Kalender Icon Klick
         buttonKalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 wieWarTag.setProgress(0);
                 System.out.println("Kalender Klick");
                 final Calendar cldr = Calendar.getInstance();
+                // heutiges Datum
                 int day = cldr.get(Calendar.DAY_OF_MONTH);
                 int month = cldr.get(Calendar.MONTH);
                 int year = cldr.get(Calendar.YEAR);
@@ -136,21 +128,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }, year, month, day);
                 picker.show();
-                for(int i = 0;i<days.size();i++){
-                    String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-                    int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
-                    if(days.get(i).getDate().equals(date.getText().toString())){
-                        ort.setText(days.get(i).getOrt());
-                        erlebnis.setText(days.get(i).getErlebnis());
-                        wieWarTag.setProgress(days.get(i).getWieWarTag());
-                        //File file = new File(imageFile)
-                    }
-                }
             }
 
         });
 
+        // Button Aufträge Klick
         buttonAuftraege.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // Button Hilfe Klick
         buttonHilfe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,29 +152,27 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // Button Speichern Klick
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Boolean alreadyExists = false;
                 int indexOfCurrentDay = 0;
+                // testen ob zum Tag schon ein Eintrag besteht
                 for(int i = 0;i<days.size();i++){
-                    String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-                    int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
                     if(days.get(i).getDate().equals(date.getText().toString())){
                         alreadyExists = true;
                         indexOfCurrentDay = i;
                     }
                 }
                 if(alreadyExists == false){
-                    String dateJustNumbers = date.getText().toString().replaceAll("[^\\d.]", "");
-                    int dateJustNumbersInteger = Integer.parseInt(dateJustNumbers);
-
+                    // Neuer Datensatz
                     Day day = new Day(date.getText().toString(),ort.getText().toString(),wieWarTag.getProgress(),
                             erlebnis.getText().toString(),imageFile);
                     days.add(day);
                     day.save();
                 } else {
+                    // Datensatz bearbeiten
                     days.get(indexOfCurrentDay).setOrt(ort.getText().toString());
                     days.get(indexOfCurrentDay).setErlebnis(erlebnis.getText().toString());
                     days.get(indexOfCurrentDay).setWieWarTag(wieWarTag.getProgress());
@@ -202,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // Wenn sich date ändert, also wenn der Tag ändert
         date.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {}
@@ -242,9 +224,11 @@ public class MainActivity extends AppCompatActivity {
         // Kamera
         btnCapture =(ImageButton)findViewById(R.id.buttonImage);
         imgCapture = (ImageView) findViewById(R.id.imageView);
+        //Klick Button Kamera
         btnCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Wieder Check, ob schon existiert
                 boolean alreadyExist = false;
                 for(int i = 0;i<days.size();i++) {
                     if (days.get(i).getDate().equals(date.getText().toString())) {
@@ -281,12 +265,13 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Bitmap bp = (Bitmap) data.getExtras().get("data");
                 imgCapture.setImageBitmap(bp);
-                //MediaStore.Images.Media.insertImage(getContentResolver(), bp, "Aus App" , "Im Emu geschossen");
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             }
         }
     }
+
+    // Methoden für Activitiy-Wechsel
     private void doTakePicClick() {
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);

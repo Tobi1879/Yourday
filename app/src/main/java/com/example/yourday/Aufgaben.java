@@ -93,18 +93,16 @@ public class Aufgaben extends AppCompatActivity {
         });
     }
 
+    // Aufgabe erledigt -> entfernen
     private void setUpListViewListener() {
-        System.out.println("Entfernen 1");
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("Entfernen 2");
                 Context context = getApplicationContext();
-                System.out.println("Entfernen 3");
                 Toast.makeText(context, "Aufgabe entfernt", Toast.LENGTH_LONG).show();
-                System.out.println("Entfernen 4");
 
+                // Datensatz löschen, und Aufgabe/Item entfernen
                 itemsAdapter.getItem(i).delete();
                 itemsAdapter.remove(itemsAdapter.getItem(i));
                 itemsAdapter.notifyDataSetChanged();
@@ -113,6 +111,7 @@ public class Aufgaben extends AppCompatActivity {
         });
     }
 
+    // add Aufgabe
     private void addItem(View view) {
         EditText input = findViewById(R.id.aufgabenHinzu);
         String itemText = input.getText().toString();
@@ -120,7 +119,6 @@ public class Aufgaben extends AppCompatActivity {
         if (!(itemText.equals(""))){
             Auftrag auftrag = new Auftrag(itemText);
             auftrag.save();
-            //auftraege.add(auftrag);
             itemsAdapter.add(auftrag);
             input.setText("");
         }
@@ -129,6 +127,7 @@ public class Aufgaben extends AppCompatActivity {
         }
     }
 
+    // Button für andere Screens / Activitys
     private void doOpenAufgaben() {
         Intent intent = new Intent(this, Aufgaben.class);
         startActivity(intent);

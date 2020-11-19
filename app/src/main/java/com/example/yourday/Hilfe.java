@@ -21,6 +21,7 @@ public class Hilfe extends AppCompatActivity {
         buttonAuftraege = (Button) findViewById(R.id.buttonAuftraege);
         buttonErstellen = (Button) findViewById(R.id.buttonErstellen);
 
+        // Klick Listeners
         buttonAuftraege.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +41,7 @@ public class Hilfe extends AppCompatActivity {
         });
     }
 
+    // Button für andere Activities
     private void doOpenAufgaben() {
         Intent intent = new Intent(this, Aufgaben.class);
         startActivity(intent);
